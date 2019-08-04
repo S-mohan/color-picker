@@ -1,0 +1,40 @@
+.mo-color-picker {
+  box-sizing: border-box;
+  * {
+    box-sizing: inherit;
+  }
+
+  width: 100%;
+  max-width: 240px;
+
+  > .mo-color-saturation {
+    width: 100%;
+    height: 180px;
+    position: relative;
+    cursor: crosshair;
+    overflow: hidden;
+    background: transparent;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    // 饱和度 越往右饱和度越高
+    &::before {
+      background: linear-gradient(to right, white, transparent);
+    }
+
+    // 明度 越往下亮度值越小
+    &::after {
+      background: linear-gradient(to top, black, transparent);
+    }
+  }
+
+
+}
