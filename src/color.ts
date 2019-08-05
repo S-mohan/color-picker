@@ -5,10 +5,10 @@
 // https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately
 
 interface Hsva {
-  h:number,
-  s:number,
-  v:number,
-  a?:number
+  h: number,
+  s: number,
+  v: number,
+  a?: number
 }
 
 const HEX_REG = /^#([a-f\d]{3}|[a-f\d]{6})$/i
@@ -19,7 +19,7 @@ const HSL_REG = /^hsla?\s?\(/i
 
 const HSV_REG = /^hsva?\s?\(/i
 
-const parseAlpha = (a:any) => a !== void 0 && !isNaN(+a) && 0 <= +a && +a <= 1 ? +a : 1
+const parseAlpha = (a: any) => a !== void 0 && !isNaN(+a) && 0 <= +a && +a <= 1 ? +a : 1
 
 export const hsv2hsl = (h: number, s: number, v: number) => {
   const l = v - v * s / 2
@@ -55,7 +55,7 @@ export const hsv2rgb = (h: number, s: number, v: number) => {
 }
 
 
-export const rgb2hsv = (r: number, g: number, b: number, a?:number):Hsva => {
+export const rgb2hsv = (r: number, g: number, b: number, a?: number): Hsva => {
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
   const d = max - min
@@ -88,7 +88,7 @@ export const rgb2hsv = (r: number, g: number, b: number, a?:number):Hsva => {
 }
 
 
-export const hsl2hsv = (h: number, s: number, l: number, a?:number):Hsva => {
+export const hsl2hsv = (h: number, s: number, l: number, a?: number): Hsva => {
   let _s
   let _v
   l *= 2
@@ -126,29 +126,41 @@ export const hex2rgb = (color: string) => {
 }
 
 
-export const parseColor = (color: string):Hsva => {
+export const rgb2hex = (r: number, g: number, b: number): string => {
+  let color = '#'
+    ;[r, g, b].forEach(v => {
+      let hex = v.toString(16)
+      if (hex.length < 2) {
+        hex = '0' + hex
+      }
+      color += hex
+    })
+  return color
+}
+
+export const parseColor = (color: string): Hsva => {
   if (!color) {
     return
   }
 
   // hex
   if (HEX_REG.test(color)) {
-    const {r, g, b} = hex2rgb(color)
+    const { r, g, b } = hex2rgb(color)
     return rgb2hsv(r, g, b)
   }
 
   // rgb
   if (RGB_REG.test(color)) {
     const colors = color
-    .replace(RGB_REG, '')
-    .replace(/\)/, '')
-    .trim()
-    .split(',')
-    .filter((v:string) => v.trim() !== '')
-    .map((v:string, index:number) => index === 3 ? parseFloat(v) : parseInt(v, 10))
+      .replace(RGB_REG, '')
+      .replace(/\)/, '')
+      .trim()
+      .split(',')
+      .filter((v: string) => v.trim() !== '')
+      .map((v: string, index: number) => index === 3 ? parseFloat(v) : parseInt(v, 10))
     // 不必校验每个值是否合法，最终校验生成的color即可
     const [r, g, b, a] = colors
-    const hsv:Hsva = rgb2hsv(r, g, b)
+    const hsv: Hsva = rgb2hsv(r, g, b)
     hsv.a = parseAlpha(a)
     return hsv
   }
@@ -158,12 +170,12 @@ export const parseColor = (color: string):Hsva => {
   if (HSV_REG.test(color) || (isHsl = HSL_REG.test(color))) {
     const reg = isHsl ? HSL_REG : HSV_REG
     const colors = color
-    .replace(reg, '')
-    .replace(/\)/, '')
-    .trim()
-    .split(',')
-    .filter((v:string) => v.trim() !== '')
-    .map((v:string, index:number) => index === 3 ? parseAlpha(v) : parseFloat(v))
+      .replace(reg, '')
+      .replace(/\)/, '')
+      .trim()
+      .split(',')
+      .filter((v: string) => v.trim() !== '')
+      .map((v: string, index: number) => index === 3 ? parseAlpha(v) : parseFloat(v))
     const [h, s, v, a] = colors
     if (!isHsl) {
       return {
@@ -175,12 +187,9 @@ export const parseColor = (color: string):Hsva => {
     } else {
       return hsl2hsv(h, s, v, a)
     }
-
-
   }
 
-
-  return 
+  return
 }
 
 
