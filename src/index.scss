@@ -1,5 +1,6 @@
 .mo-color-picker {
   box-sizing: border-box;
+
   * {
     box-sizing: inherit;
   }
@@ -10,7 +11,7 @@
   background-color: white;
 
   // 饱和度、明度面板
-  > .mo-color-sat-val {
+  >.mo-color-sat-val {
     width: 100%;
     height: 180px;
     position: relative;
@@ -38,23 +39,27 @@
       background: linear-gradient(to top, black, transparent);
     }
 
-    > .mo-color-thumb {
-      > span {
+    >.mo-color-thumb {
+      color: white;
+      >span {
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        border: 1px solid white;
+        // 这里的边框色会自动继承文本颜色
+        border: 1px solid currentColor;
         background-color: rgba(white, .025);
         transform: translate(-5px, -5px);
       }
     }
   }
 
+  // 滑块
   .mo-color-thumb {
     position: absolute;
     z-index: 1;
     outline: none;
-    > span {
+
+    >span {
       display: block;
     }
   }
@@ -66,7 +71,8 @@
     position: relative;
     margin: 10px 0 0 0;
     cursor: pointer;
-    > .mo-color-rail {
+
+    >.mo-color-rail {
       position: absolute;
       top: 0;
       left: 0;
@@ -75,7 +81,7 @@
       overflow: hidden;
     }
 
-    > .mo-color-thumb > span {
+    >.mo-color-thumb>span {
       width: 4px;
       height: 10px;
       background-color: white;
@@ -84,16 +90,22 @@
     }
   }
 
-  .mo-color-hue > .mo-color-rail {
+  // 色相
+  .mo-color-hue>.mo-color-rail {
     background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
   }
 
-  .mo-color-alpha > .mo-color-rail {
+  // 透明度
+  .mo-color-alpha {
     background-color: white;
     background-image: linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5), linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5);
     background-size: 10px 10px;
     background-position: 0 0, 5px 5px;
-  }
 
+    // 使用JavaScript更新背景色
+    >.mo-color-rail {
+      background-color: transparent;
+    }
+  }
 
 }

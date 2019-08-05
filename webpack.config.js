@@ -7,11 +7,14 @@ module.exports = env => {
   const isProd = env.production || env === 'production'
 
   const config = {
-    entry: './src/index.ts',
+    entry: {
+      demo: './examples/demo.ts',
+      'mo.color-picker': './src/index.ts'
+    },
     output: {
       publicPath: '/',
-      filename: 'mo.color-picker.js',
-      chunkFilename: 'mo.color-picker.js',
+      filename: '[name].js',
+      chunkFilename: '[name].js',
       path: path.resolve(__dirname, isProd ? './dist' : './docs'),
     },
     resolve: {
@@ -62,6 +65,7 @@ module.exports = env => {
           minifyJS: true
         },
         chunksSortMode: 'dependency',
+        chunks: ['demo', 'mo.color-picker'],
       }),
     ]
   }
