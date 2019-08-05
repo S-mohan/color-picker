@@ -6,8 +6,11 @@
 
   width: 100%;
   max-width: 240px;
+  user-select: none;
+  background-color: white;
 
-  > .mo-color-saturation {
+  // 饱和度、明度面板
+  > .mo-color-sat-val {
     width: 100%;
     height: 180px;
     position: relative;
@@ -30,10 +33,66 @@
       background: linear-gradient(to right, white, transparent);
     }
 
-    // 明度 越往下亮度值越小
+    // 明度 越往上亮度值越高
     &::after {
       background: linear-gradient(to top, black, transparent);
     }
+
+    > .mo-color-thumb {
+      > span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 1px solid white;
+        background-color: rgba(white, .025);
+        transform: translate(-5px, -5px);
+      }
+    }
+  }
+
+  .mo-color-thumb {
+    position: absolute;
+    z-index: 1;
+    outline: none;
+    > span {
+      display: block;
+    }
+  }
+
+  .mo-color-hue,
+  .mo-color-alpha {
+    width: 100%;
+    height: 10px;
+    position: relative;
+    margin: 10px 0 0 0;
+    cursor: pointer;
+    > .mo-color-rail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    > .mo-color-thumb > span {
+      width: 4px;
+      height: 10px;
+      background-color: white;
+      box-shadow: rgba(black, .6) 0 0 2px;
+      transform: translateX(-2px);
+    }
+  }
+
+  .mo-color-hue > .mo-color-rail {
+    background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+  }
+
+  .mo-color-alpha > .mo-color-rail {
+    background-color: white;
+    background-image: linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5), linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5);
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
   }
 
 
