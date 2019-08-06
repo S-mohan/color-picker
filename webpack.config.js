@@ -7,15 +7,14 @@ module.exports = env => {
   const isProd = env.production || env === 'production'
 
   const config = {
-    entry: {
-      demo: './examples/demo.ts',
-      'mo.color-picker': './src/index.ts'
-    },
+    entry: './src/index.ts',
     output: {
       publicPath: '/',
-      filename: '[name].js',
-      chunkFilename: '[name].js',
-      path: path.resolve(__dirname, isProd ? './dist' : './docs'),
+      filename: 'mo.color-picker.js',
+      path: path.resolve(__dirname, './dist'),
+      library: 'MoColorPicker',
+      libraryTarget: 'umd',
+      libraryExport: 'default'
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
@@ -53,31 +52,7 @@ module.exports = env => {
         chunkFilename: 'mo.color-picker.css'
       }),
       new OptimizeCSSPlugin({ safe: true, map: false, discardComments: { removeAll: true } }),
-      new HtmlWebpackPlugin({
-        filename: path.resolve(__dirname, './docs/index.html'),
-        template: path.resolve(__dirname, './examples/index.html'),
-        inject: true,
-        minify: {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: false,
-          minifyCSS: true,
-          minifyJS: true
-        },
-        chunksSortMode: 'dependency',
-        chunks: ['demo', 'mo.color-picker'],
-      }),
     ]
-  }
-
-  if (!isProd) {
-    config.devServer = {
-      contentBase: path.join(__dirname, './docs'),
-      compress: true,
-      hot: true,
-      open: true,
-      port: 8080,
-    }
   }
 
   return config

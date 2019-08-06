@@ -21,40 +21,48 @@ const HSV_REG = /^hsva?\s?\(/i
 
 const parseAlpha = (a: any) => a !== void 0 && !isNaN(+a) && 0 <= +a && +a <= 1 ? +a : 1
 
-export const hsv2hsl = (h: number, s: number, v: number) => {
-  const l = v - v * s / 2
-  const m = Math.min(1, 1 - l)
-
-  return {
-    h,
-    s: m ? (v - l) / m : 0,
-    l: l
+function boundValue(value: number, max: number) {
+  value = Math.min(max, Math.max(0, ~~value))
+  if ((Math.abs(value - max) < 0.000001)) {
+    return 1
   }
+  return (value % max) / (~~max)
 }
 
+/**
+ * h.s.v. 转换为 r.g.b
+ * @param h 
+ * @param s 
+ * @param v 
+ */
 export const hsv2rgb = (h: number, s: number, v: number) => {
-  let r, g, b, i, f, p, q, t
-  i = Math.floor(h * 6)
-  f = h * 6 - i
-  p = v * (1 - s)
-  q = v * (1 - f * s)
-  t = v * (1 - (1 - f) * s)
-  switch (i % 6) {
-    case 0: r = v, g = t, b = p; break
-    case 1: r = q, g = v, b = p; break
-    case 2: r = p, g = v, b = t; break
-    case 3: r = p, g = q, b = v; break
-    case 4: r = t, g = p, b = v; break
-    case 5: r = v, g = p, b = q; break
-  }
+  h = boundValue(h, 360) * 6
+  s = boundValue(s * 100, 100)
+  v = boundValue(v * 100, 100)
+
+  const i = ~~h
+  const f = h - i
+  const p = v * (1 - s)
+  const q = v * (1 - f * s)
+  const t = v * (1 - (1 - f) * s)
+  const mod = i % 6
+
+  const round = (value: number) => Math.round(value * 255)
+
   return {
-    r: Math.round(r * 255),
-    g: Math.round(g * 255),
-    b: Math.round(b * 255)
+    r: round([v, q, p, p, t, v][mod]),
+    g: round([t, v, v, q, p, p][mod]),
+    b: round([p, p, t, v, v, q][mod])
   }
 }
 
-
+/**
+ * r.g.b 转换为 h.s.v
+ * @param r 
+ * @param g 
+ * @param b 
+ * @param a 
+ */
 export const rgb2hsv = (r: number, g: number, b: number, a?: number): Hsva => {
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
@@ -87,7 +95,27 @@ export const rgb2hsv = (r: number, g: number, b: number, a?: number): Hsva => {
   }
 }
 
+/**
+ * h.s.v转换为h.s.l
+ * @param h 
+ * @param s 
+ * @param v 
+ */
+export const hsv2hsl = (h: number, s: number, v: number) => {
+  return {
+    h,
+    s: (s * v / ((h = (2 - s) * v) < 1 ? h : 2 - h)) || 0,
+    l: h / 2
+  }
+}
 
+/**
+ * h.s.l转换为h.s.v
+ * @param h 
+ * @param s 
+ * @param l 
+ * @param a 
+ */
 export const hsl2hsv = (h: number, s: number, l: number, a?: number): Hsva => {
   let _s
   let _v
@@ -103,7 +131,10 @@ export const hsl2hsv = (h: number, s: number, l: number, a?: number): Hsva => {
   }
 }
 
-
+/**
+ * hex转换为rgb
+ * @param color 
+ */
 export const hex2rgb = (color: string) => {
   color = color.replace(/^#/, '')
   if (color.length === 3) {
@@ -125,7 +156,12 @@ export const hex2rgb = (color: string) => {
   }
 }
 
-
+/**
+ * rgb转化为hex
+ * @param r 
+ * @param g 
+ * @param b 
+ */
 export const rgb2hex = (r: number, g: number, b: number): string => {
   let color = '#'
     ;[r, g, b].forEach(v => {
@@ -138,6 +174,11 @@ export const rgb2hex = (r: number, g: number, b: number): string => {
   return color
 }
 
+/**
+ * 解析输入的任意颜色值
+ * 输出h.s.v.a
+ * @param color 
+ */
 export const parseColor = (color: string): Hsva => {
   if (!color) {
     return
@@ -193,8 +234,12 @@ export const parseColor = (color: string): Hsva => {
 }
 
 
-
 export default {
+  hsv2rgb,
+  rgb2hsv,
   hsv2hsl,
-  hsv2rgb
+  hsl2hsv,
+  hex2rgb,
+  rgb2hex,
+  parseColor
 }

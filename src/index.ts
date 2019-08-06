@@ -88,8 +88,8 @@ function bindEvents(this: ColorPicker) {
   function satDrag(coordinate: Coordinate) {
     const { top, left } = coordinate
     const { satWidth, satHeight } = states
-    const saturation = left / satWidth
-    const value = 1 - top / satHeight
+    const saturation = Math.round(left / satWidth * 100) / 100
+    const value = Math.round((1 - top / satHeight) * 100) / 100
     states.s = saturation
     states.v = value
     afterSatChange.call(_)
@@ -100,7 +100,7 @@ function bindEvents(this: ColorPicker) {
   function hueDrag(coordinate: Coordinate) {
     const { left } = coordinate
     const { hueWidth } = states
-    states.h = (left / hueWidth) * 360
+    states.h = Math.round((left / hueWidth) * 360 * 100) / 100
     afterHueChange.call(_)
     updateColor.call(_)
   }
@@ -109,7 +109,7 @@ function bindEvents(this: ColorPicker) {
   function alpDrag(coordinate: Coordinate) {
     const { left } = coordinate
     const { alpWidth } = states
-    states.a = left / alpWidth
+    states.a = Math.round(left / alpWidth * 100) / 100
     afterAlpChange.call(_, true, false)
     updateColor.call(_)
   }
@@ -316,11 +316,12 @@ export class ColorPicker {
    * @returns {string}
    * @memberof ColorPicker
    */
-  getValue(): string {
+  getValue(format?:ColorFormat): string {
     const { _props: props, _states: states } = this
     const { h, s, v, a } = states
     let color
-    switch (props.format) {
+    format = format || props.format
+    switch (format) {
       case 'hsl':
         const { h: _h, s: _s, l } = hsv2hsl(h, s, v)
         color = props.alpha ? `hsla(${Math.round(_h)}, ${Math.round(_s * 100)}%, ${Math.round(l * 100)}%, ${a})` : `hsl(${Math.round(_h)}, ${Math.round(_s * 100)}%, ${Math.round(l * 100)}%)`
@@ -333,7 +334,7 @@ export class ColorPicker {
       case 'rgb':
       default:
         const { r, g, b } = hsv2rgb(h, s, v)
-        if (props.format === 'hex') {
+        if (format === 'hex') {
           color = rgb2hex(r, g, b)
         } else {
           color = props.alpha ? `rgba(${r}, ${g}, ${b}, ${a})` : `rgb(${r}, ${g}, ${b})`
