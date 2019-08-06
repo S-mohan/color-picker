@@ -209,17 +209,15 @@ function afterColorsChange(this: ColorPicker) {
 
 /**
  * 校验颜色是否合法
- * 思路：给一个DOM元素设置背景色为当前颜色
- * 如果设置成功，则表示合法
- * 如果没有设置上，则表示不合法
+ * 原理，如果颜色不合法，将会被转换为rgb(255,255,255)
+ * 只需验证设置后的颜色是否等于传入的颜色
  * @param color 
  */
 function checkColor(color: string) {
-  let $el = document.createElement('div')
-  $el.style.backgroundColor = color
-  const bgColor = $el.style.backgroundColor
-  $el = null
-  return !!bgColor
+  // todo
+  const style = new Option().style
+  style.color = color
+  return style.color === color 
 }
 
 /**
@@ -237,8 +235,9 @@ function value2Colors(this: ColorPicker, value: string, init?: boolean) {
   if (value) {
     // 正确时返回颜色值，不正确时返回undefined
     const { h, s, v, a } = parseColor(value)
+    const {r, g, b} = hsv2rgb(h, s, v,)
     // 校验当前颜色是否正确
-    if (h === void 0 || !checkColor(`hsv(${h}, ${s * 100}%, ${v * 100}%)`)) {
+    if (h === void 0 || !checkColor(`rgb(${r},${g},${b})`)) {
       // 不做操作
     } else {
       states.h = h

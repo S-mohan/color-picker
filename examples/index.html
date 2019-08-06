@@ -4,14 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>如何实现一个颜色选择器 | 水墨寒的博客</title>
+  <meta name=keywords content=color-picker,颜色选择器,色相,hsv,rgb2hsv>
+  <meta name=description
+    content="Photoshop的颜色选择器是如何实现的？如何实现一个基于HSV模式的颜色选择器？如何使用JavaScript实现一个颜色选择？rgb转hsv，hsv转rgb, hex转rgb, hsv转hex, hex 转hsl smohan.net/blog/d5uvpu">
   <link rel="stylesheet" href="../dist/mo.color-picker.css">
   <style>
     * {
       box-sizing: border-box;
     }
+
     body {
       padding: 2rem;
+      text-align: center;
+      font: 14px / 1.5 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', Arial, sans-serif;
     }
 
     .demo-box {
@@ -26,6 +32,7 @@
     .demo,
     .demo-result {
       padding: 10px;
+      text-align: left;
     }
 
     .demo-result li {
@@ -42,6 +49,7 @@
       background: transparent;
       position: relative;
     }
+
     .color-block::before {
       content: '';
       position: absolute;
@@ -49,16 +57,35 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: linear-gradient(45deg,#c5c5c5 25%,transparent 0,transparent 75%,#c5c5c5 0,#c5c5c5),linear-gradient(45deg,#c5c5c5 25%,transparent 0,transparent 75%,#c5c5c5 0,#c5c5c5);
+      background-image: linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5), linear-gradient(45deg, #c5c5c5 25%, transparent 0, transparent 75%, #c5c5c5 0, #c5c5c5);
       background-size: 10px 10px;
-      background-position: 0 0,5px 5px;
+      background-position: 0 0, 5px 5px;
       z-index: -1;
     }
 
+    .gitbtns {
+      margin: 10px auto;
+      text-align: center;
+    }
+
+    .gitbtns iframe {
+      display: inline;
+      max-width: 120px;
+    }
   </style>
 </head>
-<body>
 
+<body>
+  <h1>如何实现一个颜色选择器</h1>
+  <p>项目地址：<a href="https://github.com/S-mohan/color-picker" target="_blank">https://github.com/S-mohan/color-picker</a>
+  <p>文章地址：<a href="https://smohan.net/blog/d5uvpu" target="_blank">https://smohan.net/blog/d5uvpu</a></p>
+  </p>
+  <div class="gitbtns">
+    <iframe src="https://ghbtns.com/github-btn.html?user=S-mohan&repo=color-picker&type=star&count=true" frameborder="0"
+      scrolling="0" height="20px"></iframe>
+    <iframe src="https://ghbtns.com/github-btn.html?user=S-mohan&repo=color-picker&type=fork&count=true" frameborder="0"
+      scrolling="0" height="20px"></iframe>
+  </div>
   <div class="demo-box">
     <div class="demo">
       <div id="demo1"></div>
@@ -67,13 +94,12 @@
   </div>
 
   <div class="demo-box">
-      <div class="demo">
-        <div id="demo2"></div>
-      </div>
-      <div class="demo-result" id="demo2-result"></div>
+    <div class="demo">
+      <div id="demo2"></div>
     </div>
-
+    <div class="demo-result" id="demo2-result"></div>
+  </div>
   <script src="../dist/mo.color-picker.js"></script>
-  <script src="./demo.js"></script>  
+  <script src="./demo.js"></script>
 </body>
 </html>
