@@ -1,5 +1,3 @@
-
-
 // 颜色转换相关算法
 // https://jsfiddle.net/Lamik/9rky6fco/
 // https://stackoverflow.com/questions/17242144/javascript-convert-hsb-hsv-color-to-rgb-accurately
@@ -198,7 +196,7 @@ export const parseColor = (color: string): Hsva => {
       .trim()
       .split(',')
       .filter((v: string) => v.trim() !== '')
-      .map((v: string, index: number) => index === 3 ? parseFloat(v) : parseInt(v, 10))
+      .map((v: string, index: number) => index === 3 ? parseAlpha(v) : parseInt(v, 10))
     // 不必校验每个值是否合法，最终校验生成的color即可
     const [r, g, b, a] = colors
     const hsv: Hsva = rgb2hsv(r, g, b)
@@ -232,7 +230,6 @@ export const parseColor = (color: string): Hsva => {
 
   return
 }
-
 
 export default {
   hsv2rgb,

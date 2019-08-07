@@ -28,11 +28,9 @@ const defaults: Props = {
  * @param {MouseEvent} event
  */
 function handlerStart(this: Draggable, event: MouseEvent) {
-  if (Draggable.dragging) {
+  if (Draggable.dragging)
     return
-  }
-  document.onselectstart = () => false
-  document.ondragstart = () => false
+  event.preventDefault()
   on(document, 'mousemove', this._handlers.drag)
   on(document, 'mouseup', this._handlers.dragEnd)
   Draggable.dragging = true
@@ -58,8 +56,6 @@ function handlerDrag(this: Draggable, event: MouseEvent) {
 function handlerEnd(this: Draggable, event: MouseEvent | boolean) {
   off(document, 'mousemove', this._handlers.drag)
   off(document, 'mouseup', this._handlers.dragEnd)
-  document.onselectstart = null
-  document.ondragstart = null
   Draggable.dragging = false
   if (typeof event !== 'boolean') {
     isFunction(this._props.end) && this._props.end.call(this, getCoordinate(this._$el, event), event)

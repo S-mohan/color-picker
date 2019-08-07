@@ -67,11 +67,9 @@ function render(this: ColorPicker) {
   states.$alpThumb = $(Selectors.thumb, states.$alp)
   states.$alpRail = $(Selectors.rail, states.$alp)
   states.$wrap.appendChild($el)
-
   if (!props.alpha) {
     states.$alp.style.display = 'none'
   }
-
   bindEvents.call(this)
 }
 
@@ -153,7 +151,7 @@ function afterSatChange(this: ColorPicker) {
   states.satHeight = states.satHeight || states.$sat.offsetHeight
   const top = Math.round((1 - v) * states.satHeight)
   const left = Math.round(s * states.satWidth)
-  // 在白色多的地方显示为反色， 优化
+  // 滑块在白色多的地方显示为反色， 优化
   const color = s <= .2 && v >= .8 ? 'rgba(0,0,0,.7)' : 'white'
   states.$satThumb.style.cssText += `top: ${top}px; left: ${left}px; color: ${color};`
   afterAlpChange.call(this, false, true)
@@ -217,7 +215,7 @@ function checkColor(color: string) {
   // todo
   const style = new Option().style
   style.color = color
-  return style.color === color 
+  return style.color === color
 }
 
 /**
@@ -235,7 +233,7 @@ function value2Colors(this: ColorPicker, value: string, init?: boolean) {
   if (value) {
     // 正确时返回颜色值，不正确时返回undefined
     const { h, s, v, a } = parseColor(value)
-    const {r, g, b} = hsv2rgb(h, s, v,)
+    const { r, g, b } = hsv2rgb(h, s, v)
     // 校验当前颜色是否正确
     if (h === void 0 || !checkColor(`rgb(${r},${g},${b})`)) {
       // 不做操作
@@ -315,7 +313,7 @@ export class ColorPicker {
    * @returns {string}
    * @memberof ColorPicker
    */
-  getValue(format?:ColorFormat): string {
+  getValue(format?: ColorFormat): string {
     const { _props: props, _states: states } = this
     const { h, s, v, a } = states
     let color
