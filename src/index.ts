@@ -215,7 +215,7 @@ function checkColor(color: string) {
   // todo
   const style = new Option().style
   style.color = color
-  return style.color === color
+  return (style.color || '').replace(/\s/g, '') === color
 }
 
 /**

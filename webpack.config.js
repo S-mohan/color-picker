@@ -7,8 +7,6 @@ const pkg = require('./package.json')
 const banner = `${pkg.name} v${pkg.version}\n(c) 2019 Smohan<https://smohan.net>.\nReleased under the MIT License.\nhttps://smohan.net/blog/d5uvpu`
 
 module.exports = env => {
-  const isProd = env.production || env === 'production'
-
   const config = {
     entry: './src/index.ts',
     output: {
@@ -22,7 +20,7 @@ module.exports = env => {
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
-    devtool: isProd ? false : 'source-map',
+    devtool: 'source-map',
     module: {
       rules: [{
           test: /\.tsx?$/,

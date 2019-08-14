@@ -20,7 +20,7 @@ const HSV_REG = /^hsva?\s?\(/i
 const parseAlpha = (a: any) => a !== void 0 && !isNaN(+a) && 0 <= +a && +a <= 1 ? +a : 1
 
 function boundValue(value: number, max: number) {
-  value = Math.min(max, Math.max(0, ~~value))
+  value = Math.min(max, Math.max(0, value))
   if ((Math.abs(value - max) < 0.000001)) {
     return 1
   }
@@ -33,24 +33,32 @@ function boundValue(value: number, max: number) {
  * @param s 
  * @param v 
  */
-export const hsv2rgb = (h: number, s: number, v: number) => {
-  h = boundValue(h, 360) * 6
+export const hsv2rgb = (h: number, s: number, v: number) => { 
+  h = boundValue(h, 360)
   s = boundValue(s * 100, 100)
   v = boundValue(v * 100, 100)
 
-  const i = ~~h
-  const f = h - i
+  const i = ~~(h*6)
+  const f = h * 6 - i
   const p = v * (1 - s)
   const q = v * (1 - f * s)
   const t = v * (1 - (1 - f) * s)
-  const mod = i % 6
+  let r = 0,g = 0,b = 0;
+    switch(i % 6){
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
 
   const round = (value: number) => Math.round(value * 255)
 
   return {
-    r: round([v, q, p, p, t, v][mod]),
-    g: round([t, v, v, q, p, p][mod]),
-    b: round([p, p, t, v, v, q][mod])
+    r: round(r),
+    g: round(g),
+    b: round(b)
   }
 }
 
@@ -62,33 +70,38 @@ export const hsv2rgb = (h: number, s: number, v: number) => {
  * @param a 
  */
 export const rgb2hsv = (r: number, g: number, b: number, a?: number): Hsva => {
+  r = boundValue(r, 255)
+  g = boundValue(g, 255)
+  b = boundValue(b, 255)
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
+  let h, s
+  let v = max
+
   const d = max - min
-  const s = (max === 0 ? 0 : d / max)
-  const v = max / 255
-  let h
-  switch (max) {
-    case min: h = 0
-      break
-    case r:
-      h = (g - b) + d * (g < b ? 6 : 0)
-      h /= 6 * d
-      break
-    case g:
-      h = (b - r) + d * 2
-      h /= 6 * d
-      break
-    case b:
-      h = (r - g) + d * 4
-      h /= 6 * d
-      break
+  s = max === 0 ? 0 : d / max
+
+  if (max === min) {
+    h = 0
+  } else {
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0)
+        break
+      case g:
+        h = (b - r) / d + 2
+        break
+      case b:
+        h = (r - g) / d + 4
+        break
+    }
+    h /= 6
   }
 
   return {
-    h,
-    s,
-    v,
+    h: h * 360,
+    s: s,
+    v: v,
     a: parseAlpha(a)
   }
 }
@@ -142,15 +155,15 @@ export const hex2rgb = (color: string) => {
     }
     color = colors.join('')
   }
-  const colors = []
-  for (let i = 0; i < 6; i += 2) {
-    colors.push(parseInt('0x' + color.slice(i, i + 2)))
-  }
+  
+  const r = parseInt( [color[0],color[1] ].join(''), 16 )
+  const g = parseInt( [color[2],color[3] ].join(''), 16 )
+  const b = parseInt( [color[4],color[5] ].join(''), 16 )
 
   return {
-    r: colors[0],
-    g: colors[1],
-    b: colors[2]
+    r,
+    g,
+    b
   }
 }
 

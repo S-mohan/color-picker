@@ -42,9 +42,15 @@ run($demo1Result, instance, defaultHSV)
 
 
 const instance2 = new MoColorPicker($demo2, {
+  value: '#6bc30d',
   alpha: true,
   change(color, colors) {
     run($demo2Result, this, colors)
   }
 })
-run($demo2Result, instance2, defaultHSV)
+run($demo2Result, instance2, {
+  h: 89,
+  s: 93,
+  v: 76,
+  a: 1
+})
