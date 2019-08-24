@@ -243,13 +243,3 @@ export const parseColor = (color: string): Hsva => {
 
   return
 }
-
-export default {
-  hsv2rgb,
-  rgb2hsv,
-  hsv2hsl,
-  hsl2hsv,
-  hex2rgb,
-  rgb2hex,
-  parseColor
-}

@@ -54,7 +54,10 @@ module.exports = env => {
       }),
       new OptimizeCSSPlugin({ safe: true, map: false, discardComments: { removeAll: true } }),
       new webpack.BannerPlugin(banner)
-    ]
+    ],
+    optimization: {
+      usedExports: true
+    }
   }
 
   return config
